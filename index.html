@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+	<style> /* set the CSS */
+		circle {background-color: #000000;}
+	</style>
+<body>
+
+	<!-- load the d3.js library -->    
+	<script src="http://d3js.org/d3.v3.min.js"></script>
+
+	<script>
+
+		const w = 1000;
+    	const h = 500;
+
+    	function parseDate(date){
+    		return d3.time.format("%Y-%m-%d").parse(date);
+    	} 
+
+    	var timeScale = d3.time.scale()
+  			.domain([new Date(2016, 0, 1), new Date(2017, 0, 1)])
+			.range([0, 700]);
+
+		d3.csv("comments_occurrence.csv", function(data){
+			svgSelect = d3.select("body")
+			.append("svg")
+			.attr("width", w)
+            .attr("height", h);
+
+    		data.forEach(function(data){
+    			svgSelect
+    			.append("circle")
+    			.attr("r", 5)
+    			.attr("cx", function() {
+					return timeScale(parseDate(data.date));
+				})
+       			.attr("cy", data.comments)
+    		});
+    	});
+	</script>
+</body>
